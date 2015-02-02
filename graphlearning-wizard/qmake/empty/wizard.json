@@ -1,0 +1,67 @@
+{
+    "version": 1,
+    "kind": "project",
+    "id": "U.QtEmpty",
+    "category": "H.Project",
+    "trDescription": "Creates a Graph Learning project adding any files. This allows you to create an application using a base library.",
+    "trDisplayName": "Graph Learning Project",
+    "trDisplayCategory": "Other Project",
+    "icon": "../../../global/guiapplication.png",
+    "featuresRequired": [ "Plugin.QmakeProjectManager", "QtSupport.Wizards.FeatureQt" ],
+
+    "options":
+    [
+        { "key": "ProFileName", "value": "%{JS: Util.fileName('%{ProjectDirectory}/%{ProjectName}', 'pro')}" },
+        { "key": "IsTopLevelProject", "value": "%{JS: ('%{Exists:ProjectExplorer.Profile.Ids}') ? '' : 'yes'}" }
+    ],
+
+    "pages":
+    [
+        {
+            "trDisplayName": "Project Location",
+            "trShortTitle": "Location",
+            "typeId": "Project"
+        },
+        {
+            "trDisplayName": "Kit Selection",
+            "trShortTitle": "Kits",
+            "typeId": "Kits",
+            "enabled": "%{IsTopLevelProject}",
+            "data": { "projectFilePath": "%{ProFileName}" }
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators":
+    [
+        {
+            "typeId": "File",
+            "data":
+            [
+                {
+                    "source": "file.pro",
+                    "target": "%{ProFileName}",
+                    "openAsProject": true
+                },
+				{
+					"source": "graphlearn.h",
+					"target": "graphlearn.h",
+					"openInEditor": false
+				},
+				{
+					"source": "graphlibrary.h",
+					"target": "graphlibrary.h",
+					"openInEditor": false
+				},
+				{
+					"source": "main.cpp",
+					"target": "%{ProjectName}.cpp",
+					"openInEditor": true
+				}        
+            ]
+        }
+    ]
+}
