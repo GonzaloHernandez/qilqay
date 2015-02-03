@@ -1,7 +1,7 @@
 #include <graphlearn.h>
 
-START
+PROGRAM START
 
-arc(100,100,100,50,45,15);
+
 
 END
