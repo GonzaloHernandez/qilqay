@@ -2,6 +2,4 @@
 
 PROGRAM START
 
-
-
 END

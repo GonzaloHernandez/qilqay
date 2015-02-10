@@ -1,6 +1,6 @@
 #include <graphlearn.h>
 
-START
+PROGRAM START
 
 
 
