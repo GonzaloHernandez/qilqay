@@ -48,7 +48,7 @@ public:
     {
         QPen pen(color);
         painter.setPen(pen);
-        painter.drawLine(dx+x1,dy+y1,x2-x1,y2-y1);
+        painter.drawLine(dx+x1,dy+y1,dx+x2,dy+y2);
     }
 };
 
@@ -140,7 +140,7 @@ private:
         painter.drawRect(5,5,width,height);
 
         if (gridvisible) {
-            QPen pen1(QColor(230,230,230));
+            QPen pen1(QColor(220,220,220));
             painter.setPen(pen1);
 
             for (int i=dx+gridscale; i<=width; i+=gridscale)
@@ -167,7 +167,8 @@ private:
         {
             int x = e->x()-dx-1;
             int y = e->y()-dy-1;
-            if (e->modifiers()==Qt::ControlModifier) {
+            if (e->modifiers()==Qt::ControlModifier)
+            {
                 int lowerx = (x/gridscale)*gridscale;
                 int lowery = (y/gridscale)*gridscale;
                 int upperx = (x/gridscale+1)*gridscale;
@@ -206,7 +207,8 @@ private:
         {
             int x = e->x()-dx-1;
             int y = e->y()-dy-1;
-            if (e->modifiers()==Qt::ControlModifier) {
+            if (e->modifiers()==Qt::ControlModifier)
+            {
                 int lowerx = (x/gridscale)*gridscale;
                 int lowery = (y/gridscale)*gridscale;
                 int upperx = (x/gridscale+1)*gridscale;
@@ -267,6 +269,7 @@ private:
     {
         QString fileName = QFileInfo(QCoreApplication::applicationFilePath()).fileName().append(".png");
         fileName = QFileDialog::getSaveFileName(this,"Select the file name", fileName);
+        if (fileName.isEmpty()) return;
         QPixmap pixmap(this->size());
         this->render(&pixmap);
         pixmap.save( fileName );
@@ -276,12 +279,14 @@ public:
     GraphLibrary()
         : width(600), height(400), leftclickpressed(false),
           gridvisible(false), gridscale(10), currentcolor(Qt::red),
-          xfocus(0), yfocus(0), shapes()
+          xfocus(-1), yfocus(-1), shapes()
     {
         setWindowTitle("Graphic Programming Learning");
-        resize(width+dx*2,height+dy*2);
         setStyleSheet("background-color:white;");
-        //qDebug() << ;
+        QSize fixedSize(width+dx*2,height+dy*2);
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
+        setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     }
 
     void setGridVisible(bool gridvisible)
@@ -301,15 +306,6 @@ public:
         }
     }
 
-    void grid(int scale)
-    {
-        if (scale>=5)
-        {
-            gridvisible = true;
-            gridscale = scale;
-        }
-    }
-
     void setColor(int c)
     {
         switch(c)
@@ -319,6 +315,15 @@ public:
         case 2: currentcolor = Qt::green;  break;
         case 3: currentcolor = Qt::blue;  break;
         case 4: currentcolor = Qt::yellow;  break;
+        }
+    }
+
+    void grid(int scale)
+    {
+        if (scale>=5)
+        {
+            gridvisible = true;
+            gridscale = scale;
         }
     }
 
