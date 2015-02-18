@@ -13,9 +13,63 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QWheelEvent>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
 
 #define dx 5
 #define dy 5
+
+/**
+ * @brief The About class
+ */
+class About : public QDialog
+{
+    Q_OBJECT
+private:
+    QLabel* info[6];
+
+    void mousePressEvent(QMouseEvent*)
+    {
+        close();
+    }
+
+public:
+    About(QWidget* p) : QDialog(p)
+    {
+        setWindowTitle("About of this Application");
+        QSize fixedSize(300,150);
+        resize(fixedSize);
+        QVBoxLayout* layout = new QVBoxLayout();
+        setLayout(layout);
+        info[0] = new QLabel("Universidad de Nariño");
+        info[1] = new QLabel("<a href='http://sonar.udenar.edu.co'>http://sonar.udenar.edu.co</a>");
+        info[2] = new QLabel("-------------------------------------");
+        info[3] = new QLabel("GonzaloHernandez@udenar.edu.co");
+        info[4] = new QLabel("orevelo@udenar.edu.co");
+        info[5] = new QLabel("[ Release 6 ]");
+
+        QFont font = info[4]->font();
+        font.setPointSize(9);
+
+        for (int i=0; i<6; i++)
+        {
+            info[i]->setFont(font);
+            info[i]->setAlignment(Qt::AlignHCenter);
+            layout->addWidget(info[i]);
+        }
+
+        info[1]->setTextFormat(Qt::RichText);
+        info[1]->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        info[1]->setOpenExternalLinks(true);
+
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
+        setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+
+        setModal(true);
+    }
+};
 
 /**
  * @brief The Shape class
@@ -124,6 +178,7 @@ public:
 class GraphLibrary : public QWidget
 {
     Q_OBJECT
+friend class About;
 private:
     int     width,height;
     bool    leftclickpressed;
@@ -131,8 +186,8 @@ private:
     int     gridscale;
     QColor  currentcolor;
     int     xfocus,yfocus;
-
     QVector<Shape*> shapes;
+    About*  about;
 
     void paintEvent(QPaintEvent*)
     {
@@ -262,6 +317,10 @@ private:
         if (selectedItem)
         {
             if (selectedItem->text()=="Export Image") exportImage();
+            else if (selectedItem->text()=="About") {
+                about = new About(this);
+                about->show();
+            }
         }
     }
 
@@ -269,6 +328,7 @@ private:
     {
         QString fileName = QFileInfo(QCoreApplication::applicationFilePath()).fileName().append(".png");
         fileName = QFileDialog::getSaveFileName(this,"Select the file name", fileName);
+        if (fileName.isEmpty()) return;
         QPixmap pixmap(this->size());
         this->render(&pixmap);
         pixmap.save( fileName );
@@ -278,12 +338,14 @@ public:
     GraphLibrary()
         : width(600), height(400), leftclickpressed(false),
           gridvisible(false), gridscale(10), currentcolor(Qt::red),
-          xfocus(-1), yfocus(-1), shapes()
+          xfocus(-1), yfocus(-1), shapes(), about(NULL)
     {
         setWindowTitle("Graphic Programming Learning");
-        resize(width+dx*2,height+dy*2);
         setStyleSheet("background-color:white;");
-        //qDebug() << ;
+        QSize fixedSize(width+dx*2,height+dy*2);
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
+        setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     }
 
     void setGridVisible(bool gridvisible)
@@ -303,15 +365,6 @@ public:
         }
     }
 
-    void grid(int scale)
-    {
-        if (scale>=5)
-        {
-            gridvisible = true;
-            gridscale = scale;
-        }
-    }
-
     void setColor(int c)
     {
         switch(c)
@@ -321,6 +374,15 @@ public:
         case 2: currentcolor = Qt::green;  break;
         case 3: currentcolor = Qt::blue;  break;
         case 4: currentcolor = Qt::yellow;  break;
+        }
+    }
+
+    void grid(int scale)
+    {
+        if (scale>=5)
+        {
+            gridvisible = true;
+            gridscale = scale;
         }
     }
 
