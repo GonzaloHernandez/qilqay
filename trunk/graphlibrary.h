@@ -16,6 +16,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QDesktopServices>
 
 #define dx 5
 #define dy 5
@@ -43,11 +44,11 @@ public:
         QVBoxLayout* layout = new QVBoxLayout();
         setLayout(layout);
         info[0] = new QLabel("Universidad de Nariño");
-        info[1] = new QLabel("<a href='http://sonar.udenar.edu.co'>http://sonar.udenar.edu.co</a>");
+        info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/graphproglearn'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
         info[3] = new QLabel("GonzaloHernandez@udenar.edu.co");
         info[4] = new QLabel("orevelo@udenar.edu.co");
-        info[5] = new QLabel("[ Release 6 ]");
+        info[5] = new QLabel("[ Release 7 ]");
 
         QFont font = info[4]->font();
         font.setPointSize(9);
@@ -178,7 +179,7 @@ public:
 class GraphLibrary : public QWidget
 {
     Q_OBJECT
-friend class About;
+    friend class About;
 private:
     int     width,height;
     bool    leftclickpressed;
@@ -310,6 +311,7 @@ private:
 
         QMenu popMenu;
         popMenu.addAction("Export Image");
+        popMenu.addAction("Help");
         popMenu.addSeparator();
         popMenu.addAction("About");
 
@@ -317,6 +319,7 @@ private:
         if (selectedItem)
         {
             if (selectedItem->text()=="Export Image") exportImage();
+            else if (selectedItem->text()=="Help") goToHelp();
             else if (selectedItem->text()=="About") {
                 about = new About(this);
                 about->show();
@@ -332,6 +335,10 @@ private:
         QPixmap pixmap(this->size());
         this->render(&pixmap);
         pixmap.save( fileName );
+    }
+
+    void goToHelp() {
+        QDesktopServices::openUrl(QUrl("http://sonar.udenar.edu.co/graphproglearnhelp"));
     }
 
 public:
@@ -413,4 +420,5 @@ public:
 };
 
 #endif // GRAPHLIBRARY
+
 
