@@ -1,7 +1,7 @@
-#ifndef DRIVER
-#define DRIVER
+#ifndef QILQAY
+#define QILQAY
 
-#include <graphlibrary.h>
+#include <qilqaylibrary.h>
 
 #define BLACK  0
 #define RED 1
@@ -30,5 +30,5 @@
         app.exec(); \\
     } \\
 
-#endif // DRIVER
+#endif // QILQAY
 

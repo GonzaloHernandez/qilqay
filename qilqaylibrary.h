@@ -1,5 +1,5 @@
-#ifndef GRAPHLIBRARY
-#define GRAPHLIBRARY
+#ifndef QILQAYLIBRARY
+#define QILQAYLIBRARY
 
 #include <QApplication>
 #include <QWidget>
@@ -347,7 +347,7 @@ public:
           gridvisible(false), gridscale(10), currentcolor(Qt::red),
           xfocus(-1), yfocus(-1), shapes(), about(NULL)
     {
-        setWindowTitle("Graphic Programming Learning");
+        setWindowTitle("Qilqay - Practice logic programing with graphical exercises");
         setStyleSheet("background-color:white;");
         QSize fixedSize(width+dx*2,height+dy*2);
         setMinimumSize(fixedSize);
@@ -419,6 +419,6 @@ public:
     }
 };
 
-#endif // GRAPHLIBRARY
+#endif // QILQAYLIBRARY
 
 

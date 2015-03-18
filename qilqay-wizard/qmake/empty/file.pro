@@ -4,5 +4,5 @@ SOURCES += \\
     %{ProjectName}.cpp
 
 HEADERS += \\
-    graphlibrary.h \\
-    graphlearn.h
+    qilqaylibrary.h \\
+    qilqay.h

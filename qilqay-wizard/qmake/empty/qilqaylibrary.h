@@ -1,5 +1,5 @@
-#ifndef GRAPHLIBRARY
-#define GRAPHLIBRARY
+#ifndef QILQAYLIBRARY
+#define QILQAYLIBRARY
 
 #include <QApplication>
 #include <QWidget>
@@ -419,6 +419,6 @@ public:
     }
 };
 
-#endif // GRAPHLIBRARY
+#endif // QILQAYLIBRARY
 
 

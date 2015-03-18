@@ -1,8 +1,8 @@
 QT += widgets
 
 SOURCES += \
-    main.cpp
+    test.cpp
 
 HEADERS += \
-    graphlibrary.h \
-    graphlearn.h
+    qilqaylibrary.h \
+    qilqay.h
