@@ -2,16 +2,10 @@
 
 PROGRAM START
 
-for (int i=100; i<450; i+=50)
-{
-    circle(i,100,50);
-}
+int x,y;
+getposition(x,y,"Seleccione una ubicación para dibujar el circulo");
 
-color(BLUE);
-
-for (int i=50,j=200; i<400; i+=40,j+=10)
-{
-    rectangle(i,j,i+100,j+100);
-}
+//int x1,y1,x2,y2;
+//getarea(x1,y1,x2,y2,"Seleccione un área");
 
 END

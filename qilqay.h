@@ -19,6 +19,7 @@
     void circle(int x,int y,int r) { g->circle(x,y,r);  } \
     void oval(int x,int y,int rh,int rv) { g->oval(x,y,rh,rv);  } \
     void arc(int x,int y,int rh,int rv,int ai,int af) { g->arc(x,y,rh,rv,ai,af);  } \
+    void getposition(int& x,int& y,QString msg) { g->getposition(x,y,msg);  } \
 
 #define START \
     int main(int argCount,char* argValues[]) { \
