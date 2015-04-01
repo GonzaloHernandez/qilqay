@@ -17,6 +17,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDesktopServices>
+#include <QThread>
 
 #define dx 5
 #define dy 5
@@ -229,8 +230,10 @@ private:
 
     void mousePressEvent(QMouseEvent* e)
     {
-        if (e->button()==Qt::LeftButton)
+        if (e->button()==Qt::LeftButton && getpositionactive)
         {
+            getpositionactive=false;
+            repaint();
         }
         else if (e->button()==Qt::RightButton)
         {
@@ -440,8 +443,25 @@ public:
     {
         getpositionactive = true;
         message = msg;
+        while(getpositionactive);
+        x = posx;
+        y = posy;
     }
 };
+
+/**
+ * @brief The Instructions class
+ */
+class Instructions :public QThread {
+private:
+    GraphLibrary* g;
+public:
+    Instructions(GraphLibrary* g) : g(g){
+    }
+
+    void run();
+};
+
 
 #endif // QILQAYLIBRARY
 

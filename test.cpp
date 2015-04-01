@@ -1,11 +1,15 @@
 #include <qilqay.h>
 
-PROGRAM START
+PROGRAM
 
+void cross() {
+    rectangle(10,10,20,20);
+}
+
+START
+cross();
 int x,y;
-getposition(x,y,"Seleccione una ubicación para dibujar el circulo");
-
-//int x1,y1,x2,y2;
-//getarea(x1,y1,x2,y2,"Seleccione un área");
+getposition(x,y,"here");
+circle(x,y,100);
 
 END

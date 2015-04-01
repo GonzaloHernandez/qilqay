@@ -25,10 +25,14 @@
     int main(int argCount,char* argValues[]) { \
         QApplication app(argCount,argValues); \
         g = new GraphLibrary(); \
+        g->show(); \
+        Instructions* instructions = new Instructions(g); \
+        instructions->start(); \
+        app.exec(); \
+    } \
+    void Instructions::run() { \
 
 #define END \
-        g->show(); \
-        app.exec(); \
     } \
 
 #endif // QILQAY
