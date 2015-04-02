@@ -47,14 +47,14 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/graphproglearn'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("GonzaloHernandez@udenar.edu.co");
-        info[4] = new QLabel("orevelo@udenar.edu.co");
-        info[5] = new QLabel("[ Release 7 ]");
+        info[3] = new QLabel("[ Release 12 ]");
+        info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
+        info[5] = new QLabel("orevelo@udenar.edu.co");
 
         QFont font = info[4]->font();
         font.setPointSize(9);
 
-        for (int i=0; i<6; i++)
+        for (int i=0; i<5; i++)
         {
             info[i]->setFont(font);
             info[i]->setAlignment(Qt::AlignHCenter);

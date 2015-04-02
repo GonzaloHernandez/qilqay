@@ -1,15 +1,9 @@
 #include <qilqay.h>
 
-PROGRAM
+PROGRAM START
 
-void cross() {
-    rectangle(10,10,20,20);
-}
-
-START
-cross();
 int x,y;
-getposition(x,y,"here");
+getposition(x,y,"Seleccione una ubicación");
 circle(x,y,100);
 
 END
