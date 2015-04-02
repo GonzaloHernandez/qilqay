@@ -223,8 +223,14 @@ private:
         if (getpositionactive) {
             QPen pen2(Qt::blue);
             painter.setPen(pen2);
-            painter.drawLine(posx,0,posx,410);
-            painter.drawLine(0,posy,610,posy);
+            if (xfocus>=0) {
+                painter.drawLine(xfocus+dx,0,xfocus+dx,410);
+                painter.drawLine(0,yfocus+dy,610,yfocus+dy);
+            }
+            else {
+                painter.drawLine(posx,0,posx,410);
+                painter.drawLine(0,posy,610,posy);
+            }
         }
     }
 
@@ -263,8 +269,8 @@ private:
                 x = (x-lowerx<upperx-x)?lowerx:upperx;
                 y = (y-lowery<uppery-y)?lowery:uppery;
 
-                yfocus = y;
                 xfocus = x;
+                yfocus = y;
 
                 repaint();
             }
@@ -444,8 +450,14 @@ public:
         getpositionactive = true;
         message = msg;
         while(getpositionactive);
-        x = posx;
-        y = posy;
+        if (xfocus>=0) {
+            x = xfocus;
+            y = yfocus;
+        }
+        else {
+            x = posx-dx;
+            y = posy-dy;
+        }
     }
 };
 

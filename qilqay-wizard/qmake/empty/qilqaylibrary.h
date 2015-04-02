@@ -17,6 +17,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDesktopServices>
+#include <QThread>
 
 #define dx 5
 #define dy 5
@@ -182,13 +183,16 @@ class GraphLibrary : public QWidget
     friend class About;
 private:
     int     width,height;
-    bool    leftclickpressed;
+//    bool    leftclickpressed;
     bool    gridvisible;
     int     gridscale;
     QColor  currentcolor;
     int     xfocus,yfocus;
     QVector<Shape*> shapes;
     About*  about;
+    bool    getpositionactive;
+    QString message;
+    int     posx,posy;
 
     void paintEvent(QPaintEvent*)
     {
@@ -215,31 +219,27 @@ private:
             painter.setPen(pen2);
             painter.drawArc(dx+xfocus-5,dy+yfocus-5,10,10,0,360*16);
         }
+
+        if (getpositionactive) {
+            QPen pen2(Qt::blue);
+            painter.setPen(pen2);
+            if (xfocus>=0) {
+                painter.drawLine(xfocus+dx,0,xfocus+dx,410);
+                painter.drawLine(0,yfocus+dy,610,yfocus+dy);
+            }
+            else {
+                painter.drawLine(posx,0,posx,410);
+                painter.drawLine(0,posy,610,posy);
+            }
+        }
     }
 
     void mousePressEvent(QMouseEvent* e)
     {
-        if (e->button()==Qt::LeftButton)
+        if (e->button()==Qt::LeftButton && getpositionactive)
         {
-            int x = e->x()-dx-1;
-            int y = e->y()-dy-1;
-            if (e->modifiers()==Qt::ControlModifier)
-            {
-                int lowerx = (x/gridscale)*gridscale;
-                int lowery = (y/gridscale)*gridscale;
-                int upperx = (x/gridscale+1)*gridscale;
-                int uppery = (y/gridscale+1)*gridscale;
-                x = (x-lowerx<upperx-x)?lowerx:upperx;
-                y = (y-lowery<uppery-y)?lowery:uppery;
-
-                xfocus = x;
-                yfocus = y;
-
-                repaint();
-            }
-            QString info = QString("%1,%2").arg(x).arg(y);
-            QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), info  );
-            leftclickpressed = true;
+            getpositionactive=false;
+            repaint();
         }
         else if (e->button()==Qt::RightButton)
         {
@@ -251,19 +251,16 @@ private:
     {
         if (e->button()==Qt::LeftButton)
         {
-            xfocus = yfocus = -1;
-            leftclickpressed = false;
-            repaint();
         }
     }
 
     void mouseMoveEvent(QMouseEvent* e)
     {
-        if (leftclickpressed)
+        if (e->modifiers()==Qt::ControlModifier || e->modifiers()==Qt::AltModifier)
         {
             int x = e->x()-dx-1;
             int y = e->y()-dy-1;
-            if (e->modifiers()==Qt::ControlModifier)
+            if (e->modifiers()==Qt::AltModifier)
             {
                 int lowerx = (x/gridscale)*gridscale;
                 int lowery = (y/gridscale)*gridscale;
@@ -277,8 +274,36 @@ private:
 
                 repaint();
             }
-            QString info = QString("%1,%2").arg(x).arg(y);
-            QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), info  );
+            else if (xfocus != 0){
+                yfocus = -1;
+                xfocus = -1;
+                repaint();
+            }
+            if (getpositionactive) {
+                posx = x;
+                posy = y;
+                QString info = QString("%1,%2").arg(posx).arg(posy);
+                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+"\n("+info+")"  );
+            }
+            else {
+                QString info = QString("%1,%2").arg(x).arg(y);
+                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), info  );
+            }
+        }
+        else {
+            if (xfocus != 0){
+                yfocus = -1;
+                xfocus = -1;
+                repaint();
+                QToolTip::hideText();
+            }
+
+            if (getpositionactive) {
+                posx = e->x();
+                posy = e->y();
+                QString info = QString("%1,%2").arg(posx).arg(posy);
+                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+"\n("+info+")"  );
+            }
         }
     }
 
@@ -343,16 +368,18 @@ private:
 
 public:
     GraphLibrary()
-        : width(600), height(400), leftclickpressed(false),
+        : width(600), height(400), // leftclickpressed(false),
           gridvisible(false), gridscale(10), currentcolor(Qt::red),
-          xfocus(-1), yfocus(-1), shapes(), about(NULL)
+          xfocus(-1), yfocus(-1), shapes(), about(NULL),
+          getpositionactive(false), message("")
     {
-        setWindowTitle("Graphic Programming Learning");
+        setWindowTitle("Qilqay - Practice logic programing with graphical exercises");
         setStyleSheet("background-color:white;");
         QSize fixedSize(width+dx*2,height+dy*2);
         setMinimumSize(fixedSize);
         setMaximumSize(fixedSize);
         setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+        setMouseTracking(true);
     }
 
     void setGridVisible(bool gridvisible)
@@ -417,7 +444,36 @@ public:
     {
         shapes.append(new Arc(x,y,rh,rv,ai,af,currentcolor));
     }
+
+    void getposition(int& x,int& y,QString msg)
+    {
+        getpositionactive = true;
+        message = msg;
+        while(getpositionactive);
+        if (xfocus>=0) {
+            x = xfocus;
+            y = yfocus;
+        }
+        else {
+            x = posx-dx;
+            y = posy-dy;
+        }
+    }
 };
+
+/**
+ * @brief The Instructions class
+ */
+class Instructions :public QThread {
+private:
+    GraphLibrary* g;
+public:
+    Instructions(GraphLibrary* g) : g(g){
+    }
+
+    void run();
+};
+
 
 #endif // QILQAYLIBRARY
 
