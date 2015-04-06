@@ -18,6 +18,8 @@
 #include <QLabel>
 #include <QDesktopServices>
 #include <QThread>
+#include <QWaitCondition>
+#include <QMutex>
 
 #define dx 5
 #define dy 5
@@ -238,6 +240,7 @@ private:
     {
         if (e->button()==Qt::LeftButton && getpositionactive)
         {
+            clicked.wakeAll();
             getpositionactive=false;
             repaint();
         }
@@ -367,6 +370,9 @@ private:
     }
 
 public:
+    QMutex mutex;
+    QWaitCondition clicked;
+
     GraphLibrary()
         : width(600), height(400), // leftclickpressed(false),
           gridvisible(false), gridscale(10), currentcolor(Qt::red),
@@ -449,7 +455,9 @@ public:
     {
         getpositionactive = true;
         message = msg;
-        while(getpositionactive);
+        mutex.lock();
+        clicked.wait(&mutex);
+        mutex.unlock();
         if (xfocus>=0) {
             x = xfocus;
             y = yfocus;
