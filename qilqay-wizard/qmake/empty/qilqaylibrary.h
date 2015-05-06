@@ -49,9 +49,8 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/graphproglearn'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 12 ]");
+        info[3] = new QLabel("[ Release 14 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
-        info[5] = new QLabel("orevelo@udenar.edu.co");
 
         QFont font = info[4]->font();
         font.setPointSize(9);
@@ -286,7 +285,7 @@ private:
                 posx = x;
                 posy = y;
                 QString info = QString("%1,%2").arg(posx).arg(posy);
-                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+"\n("+info+")"  );
+                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+" ("+info+")"  );
             }
             else {
                 QString info = QString("%1,%2").arg(x).arg(y);
@@ -305,7 +304,7 @@ private:
                 posx = e->x();
                 posy = e->y();
                 QString info = QString("%1,%2").arg(posx).arg(posy);
-                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+"\n("+info+")"  );
+                QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+" ("+info+")"  );
             }
         }
     }
