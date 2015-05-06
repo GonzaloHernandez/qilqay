@@ -47,9 +47,9 @@ public:
         QVBoxLayout* layout = new QVBoxLayout();
         setLayout(layout);
         info[0] = new QLabel("Universidad de Nariño");
-        info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/graphproglearn'>http://sonar.udenar.edu.co</a>");
+        info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 14 ]");
+        info[3] = new QLabel("[ Release 15 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();
