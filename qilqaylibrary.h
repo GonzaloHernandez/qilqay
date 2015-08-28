@@ -50,7 +50,7 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 16 ]");
+        info[3] = new QLabel("[ Release 18 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();
@@ -78,7 +78,8 @@ public:
 /**
  * @brief The Shape class
  */
-class Shape {
+class Shape
+{
 protected:
     QColor color;
 public:
@@ -185,7 +186,6 @@ class GraphLibrary : public QWidget
     friend class About;
 private:
     int     width,height;
-//    bool    leftclickpressed;
     bool    gridvisible;
     int     gridscale;
     QColor  currentcolor;
@@ -223,14 +223,17 @@ private:
             painter.drawArc(dx+xfocus-5,dy+yfocus-5,10,10,0,360*16);
         }
 
-        if (getpositionactive) {
+        if (getpositionactive)
+        {
             QPen pen2(Qt::blue);
             painter.setPen(pen2);
-            if (xfocus>=0) {
+            if (xfocus>=0)
+            {
                 painter.drawLine(xfocus+dx,0,xfocus+dx,410);
                 painter.drawLine(0,yfocus+dy,610,yfocus+dy);
             }
-            else {
+            else
+            {
                 painter.drawLine(posx,0,posx,410);
                 painter.drawLine(0,posy,610,posy);
             }
@@ -279,31 +282,37 @@ private:
 
                 repaint();
             }
-            else if (xfocus != 0){
+            else if (xfocus != 0)
+            {
                 yfocus = -1;
                 xfocus = -1;
                 repaint();
             }
-            if (getpositionactive) {
+            if (getpositionactive)
+            {
                 posx = x;
                 posy = y;
                 QString info = QString("%1,%2").arg(posx).arg(posy);
                 QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+" ("+info+")"  );
             }
-            else {
+            else
+            {
                 QString info = QString("%1,%2").arg(x).arg(y);
                 QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), info  );
             }
         }
-        else {
-            if (xfocus != 0){
+        else
+        {
+            if (xfocus != 0)
+            {
                 yfocus = -1;
                 xfocus = -1;
                 repaint();
                 QToolTip::hideText();
             }
 
-            if (getpositionactive) {
+            if (getpositionactive)
+            {
                 posx = e->x();
                 posy = e->y();
                 QString info = QString("%1,%2").arg(posx).arg(posy);
@@ -350,7 +359,8 @@ private:
         {
             if (selectedItem->text()=="Export Image") exportImage();
             else if (selectedItem->text()=="Help") goToHelp();
-            else if (selectedItem->text()=="About") {
+            else if (selectedItem->text()=="About")
+            {
                 about = new About(this);
                 about->show();
             }
@@ -367,8 +377,9 @@ private:
         pixmap.save( fileName );
     }
 
-    void goToHelp() {
-        QDesktopServices::openUrl(QUrl("http://sonar.udenar.edu.co/graphproglearnhelp"));
+    void goToHelp()
+    {
+        QDesktopServices::openUrl(QUrl("http://http://sonar.udenar.edu.co/qilqay-help/"));
     }
 
 public:
@@ -462,11 +473,13 @@ public:
         clicked.wait(&mutex);
         while(controler);
         mutex.unlock();
-        if (xfocus>=0) {
+        if (xfocus>=0)
+        {
             x = xfocus;
             y = yfocus;
         }
-        else {
+        else
+        {
             x = posx-dx;
             y = posy-dy;
         }
@@ -480,7 +493,8 @@ class Instructions :public QThread {
 private:
     GraphLibrary* g;
 public:
-    Instructions(GraphLibrary* g) : g(g){
+    Instructions(GraphLibrary* g) : g(g)
+    {
     }
 
     void run();
