@@ -20,6 +20,7 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QMutex>
+//#include <QTime>
 
 #define dx 5
 #define dy 5
@@ -49,7 +50,7 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 15 ]");
+        info[3] = new QLabel("[ Release 16 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();
@@ -194,6 +195,7 @@ private:
     bool    getpositionactive;
     QString message;
     int     posx,posy;
+    bool    controler;
 
     void paintEvent(QPaintEvent*)
     {
@@ -240,6 +242,7 @@ private:
         if (e->button()==Qt::LeftButton && getpositionactive)
         {
             clicked.wakeAll();
+            controler=false;
             getpositionactive=false;
             repaint();
         }
@@ -454,8 +457,10 @@ public:
     {
         getpositionactive = true;
         message = msg;
+        controler=true;
         mutex.lock();
         clicked.wait(&mutex);
+        while(controler);
         mutex.unlock();
         if (xfocus>=0) {
             x = xfocus;

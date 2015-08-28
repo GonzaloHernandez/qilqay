@@ -28,7 +28,7 @@
         g->show(); \
         Instructions* instructions = new Instructions(g); \
         instructions->start(); \
-        app.exec(); \
+        return app.exec(); \
     } \
     void Instructions::run() { \
 
