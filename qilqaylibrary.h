@@ -50,7 +50,7 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 20 ]");
+        info[3] = new QLabel("[ Release 21 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();

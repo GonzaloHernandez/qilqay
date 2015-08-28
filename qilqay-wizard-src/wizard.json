@@ -61,11 +61,6 @@
 					"source": "main.cpp",
 					"target": "%{ProjectName}.cpp",
 					"openInEditor": true
-				},
-				{
-					"source": "../../git.ignore",
-					"target": "%{ProjectDirectory}/.gitignore",
-					"condition": "%{JS: %{IsTopLevelProject} && '%{VersionControl}' === 'G.Git'}"
 				}
 			]
 		}
