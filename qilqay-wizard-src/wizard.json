@@ -6,7 +6,7 @@
 	"trDescription": "Creates a qmake-based project without any files. This allows you to create an application without any default classes.",
 	"trDisplayName": "Qilqay Project",
 	"trDisplayCategory": "Other Project",
-	"icon": "../../../global/guiapplication.png",
+	"icon": "qilqay.png",
 	"featuresRequired": [ "QtSupport.Wizards.FeatureQt" ],
 	"enabled": "%{JS: [ %{Plugins} ].indexOf('QmakeProjectManager') >= 0}",
 	"options":
