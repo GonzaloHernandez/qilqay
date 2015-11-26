@@ -50,7 +50,7 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 23 ]");
+        info[3] = new QLabel("[ Release 24 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();
@@ -430,6 +430,10 @@ public:
         }
     }
 
+    void setColor(int r,int g,int b) {
+        currentcolor = QColor(r,g,b);
+    }
+
     void grid(int scale)
     {
         if (scale>=5)
@@ -462,6 +466,12 @@ public:
     void arc(int x,int y,int rh,int rv,int ai,int af)
     {
         shapes.append(new Arc(x,y,rh,rv,ai,af,currentcolor));
+    }
+
+    void clear()
+    {
+        shapes.clear();
+        repaint();
     }
 
     void getposition(int& x,int& y,QString msg)

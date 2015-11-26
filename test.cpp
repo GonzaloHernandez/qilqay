@@ -2,10 +2,13 @@
 
 PROGRAM START
 
-int x,y;
-for (int i=0; i<5; i++) {
-    getposition(x,y,"Seleccione una ubicación");
-    circle(x,y,50);
+int y=100;
+color(100,125,30);
+for (int i=0; i<600; i+=5) {
+    clear();
+    circle(i,y,50);
+    g->repaint();
+    usleep(10000);
 }
 
 END
