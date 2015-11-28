@@ -2,13 +2,13 @@
 
 PROGRAM START
 
-int y=100;
-color(100,125,30);
-for (int i=0; i<600; i+=5) {
+int a,b;
+getposition(a,b,"Give me one coordinate");
+
+for (int x=100; x<600; x+=1) {
     clear();
-    circle(i,y,50);
-    g->repaint();
-    usleep(10000);
+    circle(x,20,20,true);
+    msleep(10);
 }
 
 END

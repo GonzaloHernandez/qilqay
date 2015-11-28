@@ -20,7 +20,6 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QMutex>
-//#include <QTime>
 
 #define dx 5
 #define dy 5
@@ -50,7 +49,7 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 24 ]");
+        info[3] = new QLabel("[ Release 25 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();
@@ -81,9 +80,10 @@ public:
 class Shape
 {
 protected:
-    QColor color;
+    QColor  color;
+    bool    fill;
 public:
-    Shape(QColor color) : color(color)
+    Shape(QColor color, bool fill=true) : color(color), fill(fill)
     {
     }
 
@@ -119,8 +119,8 @@ class Rectangle :public Shape
 private:
     int x1,y1,x2,y2;
 public:
-    Rectangle(int x1,int y1,int x2,int y2,QColor color)
-        : Shape(color), x1(x1), y1(y1), x2(x2), y2(y2)
+    Rectangle(int x1,int y1,int x2,int y2,QColor color, bool fill=true)
+        : Shape(color,fill), x1(x1), y1(y1), x2(x2), y2(y2)
     {
     }
 
@@ -128,6 +128,12 @@ public:
     {
         QPen pen(color);
         painter.setPen(pen);
+        if (fill) {
+            painter.setBrush(QBrush(color));
+        }
+        else {
+            painter.setBrush(QBrush());
+        }
         painter.drawRect(dx+x1,dy+y1,x2-x1,y2-y1);
     }
 };
@@ -140,15 +146,21 @@ class Circle :public Shape
 private:
     int x,y,r;
 public:
-    Circle(int x,int y,int r,QColor color)
-        : Shape(color), x(x), y(y), r(r)
+    Circle(int x,int y,int r,QColor color, bool fill=true)
+        : Shape(color,fill), x(x), y(y), r(r)
     {
     }
 
     void draw(QPainter& painter) {
         QPen pen(color);
         painter.setPen(pen);
-        painter.drawArc(dx+x-r,dy+y-r,r*2,r*2,0,360*16);
+        if (fill) {
+            painter.setBrush(QBrush(color));
+        }
+        else {
+            painter.setBrush(QBrush());
+        }
+        painter.drawEllipse(dx+x-r,dy+y-r,r*2,r*2);
     }
 };
 
@@ -157,8 +169,8 @@ class Arc :public Shape
 private:
     int x,y,rh,rv,ai,af;
 public:
-    Arc(int x,int y,int rh,int rv,int ai,int af,QColor color)
-        : Shape(color), x(x), y(y), rh(rh), rv(rv), ai(ai), af(af)
+    Arc(int x,int y,int rh,int rv,int ai,int af,QColor color, bool fill=true)
+        : Shape(color,fill), x(x), y(y), rh(rh), rv(rv), ai(ai), af(af)
     {
     }
 
@@ -166,14 +178,45 @@ public:
     {
         QPen pen(color);
         painter.setPen(pen);
-        if (af>=ai)
-        {
-            painter.drawArc(dx+x-rh,dy+y-rv,rh*2,rv*2,ai*16,(af-ai)*16);
+        if (fill) {
+            painter.setBrush(QBrush(color));
+            if (af>=ai)
+            {
+                painter.drawPie(dx+x-rh,dy+y-rv,rh*2,rv*2,ai*16,(af-ai)*16);
+            }
+            else
+            {
+                painter.drawPie(dx+x-rh,dy+y-rv,rh*2,rv*2,ai*16,(360+af-ai)*16);
+            }
         }
-        else
-        {
-            painter.drawArc(dx+x-rh,dy+y-rv,rh*2,rv*2,ai*16,(360+af-ai)*16);
+        else {
+            painter.setBrush(QBrush());
+            if (af>=ai)
+            {
+                painter.drawArc(dx+x-rh,dy+y-rv,rh*2,rv*2,ai*16,(af-ai)*16);
+            }
+            else
+            {
+                painter.drawArc(dx+x-rh,dy+y-rv,rh*2,rv*2,ai*16,(360+af-ai)*16);
+            }
         }
+    }
+};
+
+class Image :public Shape
+{
+private:
+    int x,y;
+    QImage img;
+public:
+    Image(int x,int y,QString filename)
+        : Shape(Qt::black), x(x), y(y), img(QImage(filename))
+    {
+    }
+
+    void draw(QPainter& painter)
+    {
+        painter.drawImage(x,y,img);
     }
 };
 
@@ -279,7 +322,6 @@ private:
 
                 xfocus = x;
                 yfocus = y;
-
                 repaint();
             }
             else if (xfocus != 0)
@@ -288,6 +330,7 @@ private:
                 xfocus = -1;
                 repaint();
             }
+
             if (getpositionactive)
             {
                 posx = x;
@@ -307,7 +350,6 @@ private:
             {
                 yfocus = -1;
                 xfocus = -1;
-                repaint();
                 QToolTip::hideText();
             }
 
@@ -317,6 +359,7 @@ private:
                 posy = e->y();
                 QString info = QString("%1,%2").arg(posx).arg(posy);
                 QToolTip::showText( this->mapToGlobal( QPoint( e->x(), e->y() ) ), message+" ("+info+")"  );
+                repaint();
             }
         }
     }
@@ -446,26 +489,37 @@ public:
     void line(int x1,int y1,int x2,int y2)
     {
         shapes.append(new Line(x1,y1,x2,y2,currentcolor));
+        repaint();
     }
 
-    void rectangle(int x1,int y1,int x2,int y2)
+    void rectangle(int x1,int y1,int x2,int y2,bool fill=false)
     {
-        shapes.append(new Rectangle(x1,y1,x2,y2,currentcolor));
+        shapes.append(new Rectangle(x1,y1,x2,y2,currentcolor,fill));
+        repaint();
     }
 
-    void circle(int x,int y,int r)
+    void circle(int x,int y,int r,bool fill=false)
     {
-        shapes.append(new Circle(x,y,r,currentcolor));
+        shapes.append(new Circle(x,y,r,currentcolor,fill));
+        repaint();
     }
 
-    void oval(int x,int y,int rh,int rv)
+    void oval(int x,int y,int rh,int rv,bool fill=false)
     {
-        shapes.append(new Arc(x,y,rh,rv,0,360,currentcolor));
+        shapes.append(new Arc(x,y,rh,rv,0,360,currentcolor,fill));
+        repaint();
     }
 
-    void arc(int x,int y,int rh,int rv,int ai,int af)
+    void arc(int x,int y,int rh,int rv,int ai,int af,bool fill=false)
     {
-        shapes.append(new Arc(x,y,rh,rv,ai,af,currentcolor));
+        shapes.append(new Arc(x,y,rh,rv,ai,af,currentcolor,fill));
+        repaint();
+    }
+
+    void image(int x,int y,QString filename)
+    {
+        shapes.append(new Image(x,y,filename));
+        repaint();
     }
 
     void clear()
