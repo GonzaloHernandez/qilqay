@@ -23,6 +23,7 @@
     void getposition(int& x,int& y,QString msg) { g->getposition(x,y,msg);  } \
     void clear() { g->clear(); } \
     void image(int x,int y,QString filename) { g->image(x,y,filename); } \
+    int getkey() { return g->getkey(); } \
 
 #define START \
     int main(int argCount,char* argValues[]) { \

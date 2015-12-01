@@ -49,7 +49,7 @@ public:
         info[0] = new QLabel("Universidad de Nariño");
         info[1] = new QLabel("<a href='http://sonar.udenar.edu.co/qilqay'>http://sonar.udenar.edu.co</a>");
         info[2] = new QLabel("-------------------------------------");
-        info[3] = new QLabel("[ Release 25 ]");
+        info[3] = new QLabel("[ Release 26 ]");
         info[4] = new QLabel("GonzaloHernandez@udenar.edu.co");
 
         QFont font = info[4]->font();
@@ -239,6 +239,7 @@ private:
     QString message;
     int     posx,posy;
     bool    controler;
+    int     lastkey;
 
     void paintEvent(QPaintEvent*)
     {
@@ -377,6 +378,7 @@ private:
                 setGridVisible(!gridvisible);
             }
         }
+        lastkey = e->key();
     }
 
     void wheelEvent(QWheelEvent* e)
@@ -442,6 +444,7 @@ public:
         setMaximumSize(fixedSize);
         setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
         setMouseTracking(true);
+        lastkey = 0;
     }
 
     void setGridVisible(bool gridvisible)
@@ -547,6 +550,12 @@ public:
             x = posx-dx;
             y = posy-dy;
         }
+    }
+
+    int getkey() {
+        int resultkey = lastkey;
+        lastkey = 0;
+        return resultkey;
     }
 };
 
